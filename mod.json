@@ -1,11 +1,13 @@
 {
     "Name": "VU-Killstreak",
     "Description": "This adds Killstreakts to the Game",
-    "Version": "1.2.3",
+    "Version": "1.2.4",
     "HasVeniceEXT": true,
     "HasWebUI": true,
     "Dependencies": {
         "veniceext": "^1.0.0"
     },
-    "Tags": ["killstreaks"]
+    "Tags": [
+        "killstreaks"
+    ]
 }

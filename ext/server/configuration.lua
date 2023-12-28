@@ -4,38 +4,29 @@
 local conf = {
     {
         "vu-artillerystrike",
-        InputDeviceKeys.IDK_F5,
-        7000,
+        33,
+        1000,
         "Artillery",
         "Left %NR",
-        "Press F9 to use",
+        "Press Q to use", -- displayed when a user activates the killstreak
         "Ready to use"
       },
       {
-        "vu-ks-grenades",
-        65,
-        2000,
-        "Grenades",
+        "vu-ks-tank",
+        33,
+        500,
+        "Main Battle Tank",
         "Left %NR",
-        "Press F9 to use",
+        "Press Q to use", -- displayed when a user activates the killstreak
         "Ready to use"
       },
       {
-        "vu-ks-smokescreen",
-        65,
-        5500,
-        "Smokescreen",
+        "vu-ks-attackheli",
+        33,
+        500,
+        "Attack Helicopter",
         "Left %NR",
-        "Press F9 to use",
-        "Ready to use"
-      },
-      {
-        "vu-ks-adrenalinerush",
-        65,
-        3000,
-        "Adrenaline rush",
-        "Left %NR",
-        "Press F9 to use",
+        "Press Q to use", -- displayed when a user activates the killstreak
         "Ready to use"
       }
 }

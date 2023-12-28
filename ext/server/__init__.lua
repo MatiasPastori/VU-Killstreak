@@ -1,4 +1,3 @@
-
 local settings = require("settings.lua")
 local outputs = 0
 local debug = false
@@ -37,6 +36,7 @@ function Killstreak:__init()
             end
             for i, v in pairs(self.playerKillstreakScore) do
                 self.playerKillstreakScore[i] = 0
+                print("This is the index: " .. i)
                 NetEvents:SendTo("Killstreak:ScoreUpdate", PlayerManager:getPlayerById(i), tostring(0))
             end
         end
@@ -136,6 +136,7 @@ end
 function Killstreak:updatePlayerKS(player, ks)
     self.playerKillstreaks[player.id] = ks
 end
+
 function Killstreak:ResetState()
     self.playerKillstreakScore = {}
     self.playerScores = {}
@@ -160,7 +161,7 @@ function Killstreak:OnPlayerUpdate(player, deltaTime)
     if not player.hasSoldier then
         return
     end
-    
+
     if self.playerScores[player.id] ~= nil and self.playerScoreDisabled[player.id] then
         if player.score > self.playerScores[player.id] then
             self.playerScores[player.id] = player.score
@@ -182,7 +183,6 @@ function Killstreak:OnPlayerUpdate(player, deltaTime)
         modified = true
     end
     if modified and self.playerKillstreakScore[player.id] ~= nil then
-
         NetEvents:SendTo("Killstreak:ScoreUpdate", player, tostring(self.playerKillstreakScore[player.id]))
     end
 end
@@ -192,13 +192,13 @@ if debug then
         "Player:Chat",
         function(player, recipientMask, message)
             if message == "!timertest" then
-                NetEvents:SendTo("Killstreak:newTimer", player, json.encode({duration = 40, text = "Test Timer"}))
+                NetEvents:SendTo("Killstreak:newTimer", player, json.encode({ duration = 40, text = "Test Timer" }))
             end
             if message == "!mestest" then
                 NetEvents:SendTo(
                     "Killstreak:showNotification",
                     player,
-                    json.encode({message = "Test Message", title = "Test Title"})
+                    json.encode({ message = "Test Message", title = "Test Title" })
                 )
             end
         end

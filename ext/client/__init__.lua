@@ -1,9 +1,9 @@
 local bindings = require("keybindings.lua")
 local conf = nil
 local step = -1
-local inUse = {false, false, false, false}
+local inUse = { false, false, false, false }
 -- blocks the use of time based killstreaks and prevent that is constantily shown in the ui
-local running = {false, false, false, false}
+local running = { false, false, false, false }
 local keyUpThreshold = 30
 local curKeyUpEvents = 0
 local selectedKillstreaks = nil
@@ -87,7 +87,7 @@ Events:Subscribe(
         messageObjJson = json.encode(messageObjJson)
         WebUI:ExecuteJS(
             'document.dispatchEvent(new CustomEvent("Killstreak:UI:showNotification",{detail:' ..
-                messageObjJson .. "}))"
+            messageObjJson .. "}))"
         )
     end
 )
@@ -98,7 +98,7 @@ NetEvents:Subscribe(
         messageObjJson = json.encode(messageObjJson)
         WebUI:ExecuteJS(
             'document.dispatchEvent(new CustomEvent("Killstreak:UI:showNotification",{detail:' ..
-                messageObjJson .. "}))"
+            messageObjJson .. "}))"
         )
     end
 )
@@ -127,7 +127,7 @@ end
 
 Hooks:Install(
     "UI:PushScreen",
-    1,
+    141,
     function(hook, screen, priority, parentGraph, stateNodeGuid)
         local screen = UIGraphAsset(screen)
         if screen.name == "UI/Flow/Screen/EORWinningTeamScreen" then
@@ -256,7 +256,7 @@ Events:Subscribe(
                     if used ~= nil then
                         WebUI:ExecuteJS(
                             'document.dispatchEvent(new CustomEvent("Killstreak:UI:selectStep",{detail:' ..
-                                tostring(-10) .. "}))"
+                            tostring(-10) .. "}))"
                         )
                         -- Disable the aktive KS
                         Events:Dispatch(selectedKillstreaks[used][1] .. ":Disable", i)
@@ -265,7 +265,7 @@ Events:Subscribe(
                     end
                     WebUI:ExecuteJS(
                         'document.dispatchEvent(new CustomEvent("Killstreak:UI:selectStep",{detail:' ..
-                            tostring(i) .. "}))"
+                        tostring(i) .. "}))"
                     )
                     inUse[i] = true
                     running[i] = true
@@ -277,7 +277,7 @@ Events:Subscribe(
                 Events:Dispatch(selectedKillstreaks[i][1] .. ":Disable", i)
                 WebUI:ExecuteJS(
                     'document.dispatchEvent(new CustomEvent("Killstreak:UI:selectStep",{detail:' ..
-                        tostring(-10) .. "}))"
+                    tostring(-10) .. "}))"
                 )
                 inUse[i] = false
                 running[i] = false
@@ -350,7 +350,6 @@ NetEvents:Subscribe(
 Events:Subscribe(
     "Killstreak:usedStep",
     function(usedStep, timeBased)
-        converted = json.encode(inUse)
         WebUI:ExecuteJS(
             'document.dispatchEvent(new CustomEvent("Killstreak:UI:selectStep",{detail:' .. tostring(-10) .. "}))"
         )
@@ -364,6 +363,21 @@ Events:Subscribe(
 )
 
 Events:Subscribe(
+    "Killstreak:UnavailableKS",
+    function(ksIndex, timeBased)
+        if inUse[ksIndex] == true then
+            WebUI:ExecuteJS(
+                'document.dispatchEvent(new CustomEvent("Killstreak:UI:selectStep",{detail:' .. tostring(-10) .. "}))"
+            )
+            inUse[ksIndex] = false
+            if timeBased == nil or timeBased == false then
+                running[ksIndex] = false
+            end
+        end
+    end
+)
+
+Events:Subscribe(
     "Killstreak:Finished",
     function(usedStep)
         running[usedStep] = false
@@ -371,9 +385,9 @@ Events:Subscribe(
 )
 function resetState()
     step = -1
-    inUse = {false, false, false, false}
+    inUse = { false, false, false, false }
     -- blocks the use of time based killstreaks and prevent that is constantily shown in the ui
-    running = {false, false, false, false}
+    running = { false, false, false, false }
     score = 0
     disabledAction = false
     WebUI:ExecuteJS(
@@ -383,28 +397,3 @@ function resetState()
         'document.dispatchEvent(new CustomEvent("Killstreak:UpdateScore",{detail:"' .. tostring(0) .. '"}))'
     )
 end
-
-Events:Subscribe(
-    "Server:RoundOver",
-    self,
-    function()
-        for i, v in pairs(self.playerKillstreakScore) do
-            self.playerKillstreakScore[i] = 0
-            NetEvents:SendTo("Killstreak:ScoreUpdate", PlayerManager:getPlayerById(i), tostring(0))
-        end
-    end
-)
-
-Events:Subscribe(
-    "Server:RoundReset",
-    self,
-    function()
-        for i, v in pairs(self.playerScores) do
-            self.playerScores[i] = 0
-        end
-        for i, v in pairs(self.playerKillstreakScore) do
-            self.playerKillstreakScore[i] = 0
-            NetEvents:SendTo("Killstreak:ScoreUpdate", PlayerManager:getPlayerById(i), tostring(0))
-        end
-    end
-)
