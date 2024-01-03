@@ -1,5 +1,5 @@
 import React from "react";
-import { Steps,Button } from "antd";
+import { Steps, Button } from "antd";
 import KsTimerList from "./kstimer/kstimerlist";
 const { Step } = Steps;
 class Progess extends React.Component {
@@ -59,7 +59,7 @@ class Progess extends React.Component {
   }
 
   updateScoreCallback = (e) => {
-    if(e.detail < 0){
+    if (e.detail < 0) {
       e.detail = 0
     }
     this.setState({
@@ -86,12 +86,12 @@ class Progess extends React.Component {
       return { step: 0, perc: 0 };
     }
     let vals = [0];
-    this.props.layout.forEach(el =>{
+    this.props.layout.forEach(el => {
       vals.push(el[2])
     })
     for (let i = 0; i < vals.length; i++) {
       if (vals[i] <= score && score < vals[i + 1]) {
-        let erg = this.setCurrentStepPercentage(i, score- vals[i],vals);
+        let erg = this.setCurrentStepPercentage(i, score - vals[i], vals);
         /*eslint-disable no-undef*/
         if (process.env.NODE_ENV === "production") {
           //WebUI.Call("DispatchEvent", "Killstreak:StepUpdate", i);
@@ -105,30 +105,30 @@ class Progess extends React.Component {
           //WebUI.Call("DispatchEvent", "Killstreak:StepUpdate", i + 1);
         }
         /*eslint-enable no-undef*/
-        if(score >= vals[i]){
-        return { step: i, perc:100 };
+        if (score >= vals[i]) {
+          return { step: i, perc: 100 };
         }
-        let erg = this.setCurrentStepPercentage(0, score-vals[i],vals);
+        let erg = this.setCurrentStepPercentage(0, score - vals[i], vals);
         return { step: 0, perc: erg };
       }
     }
   }
 
-  setCurrentStepPercentage(curStep, score,vals) {
+  setCurrentStepPercentage(curStep, score, vals) {
     if (curStep > vals.length - 1) {
       return 100;
     }
-    if(curStep > 0){
-      let erg = parseInt((score * 100) / (vals[curStep+1]-vals[curStep]));
+    if (curStep > 0) {
+      let erg = parseInt((score * 100) / (vals[curStep + 1] - vals[curStep]));
       return erg
-    }else{
-      return parseInt((score * 100) / vals[curStep+1]);
+    } else {
+      return parseInt((score * 100) / vals[curStep + 1]);
     }
-    
+
   }
-  createDescription(el,index) {
+  createDescription(el, index) {
     let str = el[4];
-    if(this.props.selectedStep-1 === index){
+    if (this.props.selectedStep - 1 === index) {
       return el[5]
     }
     if (str == undefined) {
@@ -143,7 +143,7 @@ class Progess extends React.Component {
     return str.replace("%NR", erg);
   }
 
-  getIcon(el,index,step) {
+  getIcon(el, index, step) {
     if (step < index) {
       return (
         <div className={"ant-steps-item-icon"}>
@@ -151,7 +151,7 @@ class Progess extends React.Component {
             className="ant-steps-icon"
             style={{ height: "100%", top: "5px" }}
           >
-            <span style={{ top: "-2px" }}>{"F"+(5+index)}</span>
+            <span style={{ top: "-2px" }}>{"F" + (5 + index)}</span>
           </div>
         </div>
       );
@@ -163,13 +163,13 @@ class Progess extends React.Component {
             style={{ height: "100%", top: "6px" }}
           >
             <span style={{ color: "white" }}>
-              {"F"+(5+index)}
+              {"F" + (5 + index)}
             </span>
           </div>
         </div>
       );
     } else {
-      return <span>{"F"+(5+index)}</span>;
+      return <span>{"F" + (5 + index)}</span>;
     }
   }
 
@@ -177,60 +177,60 @@ class Progess extends React.Component {
     let { step, perc } = this.setCurrentStep(this.state.score);
     return (
       <div style={this.props.style} className={this.props.className}>
-          <div
-            style={{
-              color: "white",
-              fontSize: "x-large",
-              flexBasis:"100%",
-              position:"relative",
-              left:"12%"
-            }}
-          >
-            {parseInt(this.state.score)}
-          </div>
-        {this.props.layout.length > 0 ?
-        <Steps
-          current={step}
-          percent={perc}
-          direction="vertical"
+        <div
           style={{
             color: "white",
-            transform: "scale(1.1)",
-            width: "auto",
-            fontWeight: "100",
-            transformOrigin:"0 0",
-            marginTop:"5%",
-            marginBottom:"5%",
-            flexBasis:"100%"
+            fontSize: "x-large",
+            flexBasis: "100%",
+            position: "relative",
+            left: "12%"
           }}
         >
-          {this.props.layout.map((el, index) => {
-            return (
-              <Step
-                status={this.props.selectedStep-1 === index ? "error": undefined}
-                icon={this.getIcon(el,index,step)}
-                key={index}
-                title={el[3]}
-                description={this.createDescription(
-                  el,
-                  index
-                )}
-                style={{ color: "white",width:"fit-content" }}
-              />
-            );
-          })}
-        </Steps>
-        :
-        <div className="infoText"> Press the killstreak button in the spawn screen to select your killstreaks</div>
-        }
-        {this.props.showButton ? 
-        <div style={{flexBasis:"100%",alignContent:"center"}}>
-          <Button type="ghost" onClick={this.props.showUi} className="ksButton">
-            Select killstreaks
-        </Button>
+          {parseInt(this.state.score)}
         </div>
-        :
-        null}
+        {this.props.layout.length > 0 ?
+          <Steps
+            current={step}
+            percent={perc}
+            direction="vertical"
+            style={{
+              color: "white",
+              transform: "scale(1.1)",
+              width: "auto",
+              fontWeight: "100",
+              transformOrigin: "0 0",
+              marginTop: "5%",
+              marginBottom: "5%",
+              flexBasis: "100%"
+            }}
+          >
+            {this.props.layout.map((el, index) => {
+              return (
+                <Step
+                  status={this.props.selectedStep - 1 === index ? "error" : undefined}
+                  icon={this.getIcon(el, index, step)}
+                  key={index}
+                  title={el[3]}
+                  description={this.createDescription(
+                    el,
+                    index
+                  )}
+                  style={{ color: "white", width: "fit-content" }}
+                />
+              );
+            })}
+          </Steps>
+          :
+          <div className="infoText"> Press the killstreak button in the spawn screen to select your killstreaks</div>
+        }
+        {this.props.showButton ?
+          <div style={{ flexBasis: "100%", alignContent: "center" }}>
+            <Button type="ghost" onClick={this.props.showUi} className="ksButton">
+              Select killstreaks
+            </Button>
+          </div>
+          :
+          null}
         <KsTimerList timers={this.props.timers} onCompleted={this.props.onCompleted} />
       </div>
     );

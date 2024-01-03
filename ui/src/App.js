@@ -16,7 +16,7 @@ class App extends React.Component {
       selectedKillstreaks: [],
       showKsButton: true,
       timers: [],
-      selectedStep : -10
+      selectedStep: -10
     };
     this.toggle = this.toggle.bind(this);
     this.getAllKillstreaks = this.getAllKillstreaks.bind(this);
@@ -154,7 +154,7 @@ class App extends React.Component {
 
   newTimer(e) {
     let timersN = this.state.timers;
-    console.log("New Timer: ",e.detail)
+    console.log("New Timer: ", e.detail)
     timersN.push(JSON.parse(e.detail))
     console.log("new List", timersN)
     this.setState({
@@ -185,9 +185,9 @@ class App extends React.Component {
       showKsButton: false,
     });
   }
-  selectedStep(e){
+  selectedStep(e) {
     this.setState({
-      selectedStep: parseInt(e.detail) 
+      selectedStep: parseInt(e.detail)
     })
   }
 
@@ -301,7 +301,7 @@ class App extends React.Component {
   }
 
   showNotification(e) {
-    console.log("Notification: ",e.detail)
+    console.log("Notification: ", e.detail)
     let obj = JSON.parse(e.detail)
     notification.open({
       message: obj.title,
